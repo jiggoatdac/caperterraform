@@ -138,7 +138,45 @@ pipeline:
                   timeout: 10m
               - step:
                   type: Container
-                  name: run planplan
+                  name: debug
+                  identifier: debug
+                  spec:
+                    connectorRef: DockerJiggcaper
+                    image: hashicorp/terraform:latest
+                    command: |-
+                      echo "=== Directorio actual ==="
+                      pwd
+                      echo "=== Archivos y carpetas ==="
+                      ls -la
+                      echo "=== Buscando archivos .tf ==="
+                      find . -name "*.tf" -type f
+                    shell: Sh
+                    infrastructure:
+                      type: KubernetesDirect
+                      spec:
+                        connectorRef: account.atdaccluster
+                        namespace: default
+                        resources:
+                          limits:
+                            cpu: "0.5"
+                            memory: 500Mi
+                        annotations: {}
+                        labels: {}
+                        containerSecurityContext:
+                          capabilities:
+                            drop: []
+                            add: []
+                        nodeSelector: {}
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths: []
+                    outputVariables: []
+                    envVariables: {}
+                  timeout: 10m
+              - step:
+                  type: Container
+                  name: run plan
                   identifier: run_planplan
                   spec:
                     connectorRef: DockerJiggcaper
