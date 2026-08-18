@@ -1,0 +1,14 @@
+inputSet:
+  name: default inputs
+  identifier: default_inputs
+  orgIdentifier: Jorge_playground
+  projectIdentifier: CaPer_CI_CD
+  pipeline:
+    identifier: caperterra
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
