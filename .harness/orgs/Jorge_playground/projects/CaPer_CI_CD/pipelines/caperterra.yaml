@@ -76,6 +76,38 @@ pipeline:
                   steps:
                     - step:
                         type: Container
+                        name: Clone
+                        identifier: Clone
+                        spec:
+                          connectorRef: DockerJiggcaper
+                          image: alpine/git:latest
+                          command: git clone https://jiggoatdac:${GITHUB_TOKEN}@github.com/jiggoatdac/caperterraform.git .
+                          shell: Sh
+                          infrastructure:
+                            type: KubernetesDirect
+                            spec:
+                              connectorRef: account.atdaccluster
+                              namespace: default
+                              resources:
+                                limits:
+                                  cpu: "0.5"
+                                  memory: 500Mi
+                              annotations: {}
+                              labels: {}
+                              containerSecurityContext:
+                                capabilities:
+                                  drop: []
+                                  add: []
+                              nodeSelector: {}
+                          reports:
+                            type: JUnit
+                            spec:
+                              paths: []
+                          outputVariables: []
+                          envVariables: {}
+                        timeout: 10m
+                    - step:
+                        type: Container
                         name: run init
                         identifier: run_init
                         spec:
@@ -115,7 +147,7 @@ pipeline:
                         spec:
                           connectorRef: DockerJiggcaper
                           image: hashicorp/terraform:latest
-                          command: cd /harness/caperterraform && terraform validate
+                          command: terraform validate
                           shell: Sh
                           infrastructure:
                             type: KubernetesDirect
@@ -187,7 +219,7 @@ pipeline:
                         spec:
                           connectorRef: DockerJiggcaper
                           image: hashicorp/terraform:latest
-                          command: cd /harness/caperterraform && terraform plan -out=tfplan
+                          command: terraform plan -out=tfplan
                           shell: Sh
                           infrastructure:
                             type: KubernetesDirect
