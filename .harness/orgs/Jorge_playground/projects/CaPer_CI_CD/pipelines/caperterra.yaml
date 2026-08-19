@@ -4,40 +4,7 @@ pipeline:
   projectIdentifier: CaPer_CI_CD
   orgIdentifier: Jorge_playground
   tags: {}
-  properties:
-    ci:
-      codebase:
-        connectorRef: jigg_terrainfra
-        build: <+input>
   stages:
-    - stage:
-        name: terraform_plan_apply
-        identifier: terraform_plan_apply
-        description: ""
-        type: CI
-        spec:
-          cloneCodebase: true
-          caching:
-            enabled: true
-            override: false
-          platform:
-            os: Linux
-            arch: Amd64
-          runtime:
-            type: Cloud
-            spec: {}
-          execution:
-            steps:
-              - step:
-                  type: GitClone
-                  name: GitClone_1
-                  identifier: GitClone_1
-                  spec:
-                    connectorRef: jigg_terrainfra
-                    build:
-                      type: branch
-                      spec:
-                        branch: main
     - stage:
         name: terraapprove
         identifier: terraapprove
