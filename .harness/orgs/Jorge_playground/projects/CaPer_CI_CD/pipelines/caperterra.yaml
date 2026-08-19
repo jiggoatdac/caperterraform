@@ -77,7 +77,7 @@ pipeline:
                   spec:
                     connectorRef: DockerJiggcaper
                     image: hashicorp/terraform:latest
-                    command: terraform init
+                    command: cd /harness/caperterraform && terraform init
                     shell: Sh
                     infrastructure:
                       type: KubernetesDirect
@@ -111,7 +111,7 @@ pipeline:
                   spec:
                     connectorRef: DockerJiggcaper
                     image: hashicorp/terraform:latest
-                    command: terraform validate
+                    command: cd /harness/caperterraform && terraform validate
                     shell: Sh
                     infrastructure:
                       type: KubernetesDirect
@@ -181,7 +181,7 @@ pipeline:
                   spec:
                     connectorRef: DockerJiggcaper
                     image: hashicorp/terraform:latest
-                    command: terraform plan -out=tfplan
+                    command: cd /harness/caperterraform && terraform plan -out=tfplan
                     shell: Sh
                     infrastructure:
                       type: KubernetesDirect
@@ -230,7 +230,7 @@ pipeline:
                   spec:
                     connectorRef: DockerJiggcaper
                     image: "\thashicorp/terraform:latest"
-                    command: terraform apply -auto-approve tfplan
+                    command: cd /harness/caperterraform && terraform apply -auto-approve tfplan
                     shell: Sh
                     infrastructure:
                       type: KubernetesDirect
