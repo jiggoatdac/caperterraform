@@ -70,142 +70,149 @@ pipeline:
                   spec:
                     skipDryRun: false
                     pruningEnabled: false
-              - step:
-                  type: Container
-                  name: run init
-                  identifier: run_init
-                  spec:
-                    connectorRef: DockerJiggcaper
-                    image: hashicorp/terraform:latest
-                    command: cd /harness/caperterraform && terraform init
-                    shell: Sh
-                    infrastructure:
-                      type: KubernetesDirect
-                      spec:
-                        connectorRef: account.atdaccluster
-                        namespace: default
-                        resources:
-                          limits:
-                            cpu: "0.5"
-                            memory: 500Mi
-                        annotations: {}
-                        labels: {}
-                        containerSecurityContext:
-                          capabilities:
-                            drop: []
-                            add: []
-                        nodeSelector: {}
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths: []
-                    outputVariables: []
-                    envVariables: {}
-                    delegateSelectors:
-                      - atdac-main
-                  timeout: 10m
-              - step:
-                  type: Container
-                  name: run validate
-                  identifier: run_validate
-                  spec:
-                    connectorRef: DockerJiggcaper
-                    image: hashicorp/terraform:latest
-                    command: cd /harness/caperterraform && terraform validate
-                    shell: Sh
-                    infrastructure:
-                      type: KubernetesDirect
-                      spec:
-                        connectorRef: account.atdaccluster
-                        namespace: default
-                        resources:
-                          limits:
-                            cpu: "0.5"
-                            memory: 500Mi
-                        annotations: {}
-                        labels: {}
-                        containerSecurityContext:
-                          capabilities:
-                            drop: []
-                            add: []
-                        nodeSelector: {}
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths: []
-                    outputVariables: []
-                    envVariables: {}
-                  timeout: 10m
-              - step:
-                  type: Container
-                  name: debug
-                  identifier: debug
-                  spec:
-                    connectorRef: DockerJiggcaper
-                    image: hashicorp/terraform:latest
-                    command: |-
-                      echo "=== Directorio actual ==="
-                      pwd
-                      echo "=== Archivos y carpetas ==="
-                      ls -la
-                      echo "=== Buscando archivos .tf ==="
-                      find . -name "*.tf" -type f
-                    shell: Sh
-                    infrastructure:
-                      type: KubernetesDirect
-                      spec:
-                        connectorRef: account.atdaccluster
-                        namespace: default
-                        resources:
-                          limits:
-                            cpu: "0.5"
-                            memory: 500Mi
-                        annotations: {}
-                        labels: {}
-                        containerSecurityContext:
-                          capabilities:
-                            drop: []
-                            add: []
-                        nodeSelector: {}
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths: []
-                    outputVariables: []
-                    envVariables: {}
-                  timeout: 10m
-              - step:
-                  type: Container
-                  name: run plan
-                  identifier: run_planplan
-                  spec:
-                    connectorRef: DockerJiggcaper
-                    image: hashicorp/terraform:latest
-                    command: cd /harness/caperterraform && terraform plan -out=tfplan
-                    shell: Sh
-                    infrastructure:
-                      type: KubernetesDirect
-                      spec:
-                        connectorRef: account.atdaccluster
-                        namespace: default
-                        resources:
-                          limits:
-                            cpu: "0.5"
-                            memory: 500Mi
-                        annotations: {}
-                        labels: {}
-                        containerSecurityContext:
-                          capabilities:
-                            drop: []
-                            add: []
-                        nodeSelector: {}
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths: []
-                    outputVariables: []
-                    envVariables: {}
-                  timeout: 10m
+              - stepGroup:
+                  name: terragrup1
+                  identifier: terragrup1
+                  steps:
+                    - step:
+                        type: Container
+                        name: run init
+                        identifier: run_init
+                        spec:
+                          connectorRef: DockerJiggcaper
+                          image: hashicorp/terraform:latest
+                          command: terraform init
+                          shell: Sh
+                          infrastructure:
+                            type: KubernetesDirect
+                            spec:
+                              connectorRef: account.atdaccluster
+                              namespace: default
+                              resources:
+                                limits:
+                                  cpu: "0.5"
+                                  memory: 500Mi
+                              annotations: {}
+                              labels: {}
+                              containerSecurityContext:
+                                capabilities:
+                                  drop: []
+                                  add: []
+                              nodeSelector: {}
+                          reports:
+                            type: JUnit
+                            spec:
+                              paths: []
+                          outputVariables: []
+                          envVariables: {}
+                          delegateSelectors:
+                            - atdac-main
+                        timeout: 10m
+                    - step:
+                        type: Container
+                        name: run validate
+                        identifier: run_validate
+                        spec:
+                          connectorRef: DockerJiggcaper
+                          image: hashicorp/terraform:latest
+                          command: cd /harness/caperterraform && terraform validate
+                          shell: Sh
+                          infrastructure:
+                            type: KubernetesDirect
+                            spec:
+                              connectorRef: account.atdaccluster
+                              namespace: default
+                              resources:
+                                limits:
+                                  cpu: "0.5"
+                                  memory: 500Mi
+                              annotations: {}
+                              labels: {}
+                              containerSecurityContext:
+                                capabilities:
+                                  drop: []
+                                  add: []
+                              nodeSelector: {}
+                          reports:
+                            type: JUnit
+                            spec:
+                              paths: []
+                          outputVariables: []
+                          envVariables: {}
+                        timeout: 10m
+                      contextType: Pipeline
+                    - step:
+                        type: Container
+                        name: debug
+                        identifier: debug
+                        spec:
+                          connectorRef: DockerJiggcaper
+                          image: hashicorp/terraform:latest
+                          command: |-
+                            echo "=== Directorio actual ==="
+                            pwd
+                            echo "=== Archivos y carpetas ==="
+                            ls -la
+                            echo "=== Buscando archivos .tf ==="
+                            find . -name "*.tf" -type f
+                          shell: Sh
+                          infrastructure:
+                            type: KubernetesDirect
+                            spec:
+                              connectorRef: account.atdaccluster
+                              namespace: default
+                              resources:
+                                limits:
+                                  cpu: "0.5"
+                                  memory: 500Mi
+                              annotations: {}
+                              labels: {}
+                              containerSecurityContext:
+                                capabilities:
+                                  drop: []
+                                  add: []
+                              nodeSelector: {}
+                          reports:
+                            type: JUnit
+                            spec:
+                              paths: []
+                          outputVariables: []
+                          envVariables: {}
+                        timeout: 10m
+                      contextType: Pipeline
+                    - step:
+                        type: Container
+                        name: run plan
+                        identifier: run_planplan
+                        spec:
+                          connectorRef: DockerJiggcaper
+                          image: hashicorp/terraform:latest
+                          command: cd /harness/caperterraform && terraform plan -out=tfplan
+                          shell: Sh
+                          infrastructure:
+                            type: KubernetesDirect
+                            spec:
+                              connectorRef: account.atdaccluster
+                              namespace: default
+                              resources:
+                                limits:
+                                  cpu: "0.5"
+                                  memory: 500Mi
+                              annotations: {}
+                              labels: {}
+                              containerSecurityContext:
+                                capabilities:
+                                  drop: []
+                                  add: []
+                              nodeSelector: {}
+                          reports:
+                            type: JUnit
+                            spec:
+                              paths: []
+                          outputVariables: []
+                          envVariables: {}
+                        timeout: 10m
+                      contextType: Pipeline
               - step:
                   type: HarnessApproval
                   name: approveInfra
