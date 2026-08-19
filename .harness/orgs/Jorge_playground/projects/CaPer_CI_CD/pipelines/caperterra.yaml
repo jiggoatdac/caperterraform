@@ -219,7 +219,7 @@ pipeline:
                         spec:
                           connectorRef: DockerJiggcaper
                           image: hashicorp/terraform:latest
-                          command: terraform plan -out=tfplan
+                          command: cd /harness/caperterraform && terraform plan -out=tfplan
                           shell: Sh
                           infrastructure:
                             type: KubernetesDirect
